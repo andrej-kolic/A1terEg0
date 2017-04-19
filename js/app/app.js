@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
 import Messages from '../messages/Messages';
 import Profile from '../user/Profile';
+import Frame from './Frame';
 
 import { applyRouterMiddleware, Route } from 'react-router';
 import useRelay from 'react-router-relay';
@@ -27,15 +28,21 @@ ReactDOM.render(
     environment={Relay.Store}
   >
     <Route
-      path="profile"
-      component={Profile}
+      path="/"
       queries={ViewerQueries}
-    />
-    <Route
-      path="messages"
-      component={Messages}
-      queries={ViewerQueries}
-    />
+      component={Frame}
+    >
+      <Route
+        path="profile"
+        component={Profile}
+        queries={ViewerQueries}
+      />
+      <Route
+        path="messages"
+        component={Messages}
+        queries={ViewerQueries}
+      />
+    </Route>
   </Router>,
   document.getElementById('root')
 );

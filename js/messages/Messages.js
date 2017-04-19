@@ -1,6 +1,5 @@
 import React from 'react';
 import Relay from 'react-relay';
-import { Link } from 'react-router';
 import createLogger from '../logger';
 
 const log = createLogger('components.Messages');
@@ -10,13 +9,6 @@ class Messages extends React.Component {
   render() {
     return (
       <div>
-        <ul>
-          <li><Link to="/profile">Profile</Link></li>
-          <li><Link to="/messages">Messages</Link></li>
-        </ul>
-
-        <hr/>
-
         <h1>Messages</h1>
         <ul>
           {this.props.viewer.messages.edges.map(edge =>
