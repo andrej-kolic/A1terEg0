@@ -32,11 +32,11 @@ import {
 import {
   // Import methods that your schema can use to interact with your database
   UserEntity,
-  WidgetEntity,
+  MessageEntity,
   getUser,
   getViewer,
-  getWidget,
-  getWidgets,
+  getMessage,
+  getMessages,
   createMessage,
 } from './database';
 
@@ -60,7 +60,7 @@ const {nodeInterface, nodeField} = nodeDefinitions(
     if (type === 'User') {
       return getUser(id);
     } else if (type === 'Widget') {
-      return getWidget(id);
+      return getMessage(id);
     } else {
       return null;
     }
@@ -69,7 +69,7 @@ const {nodeInterface, nodeField} = nodeDefinitions(
     log.debug('obj:', obj);
     if (obj instanceof UserEntity) {
       return userType;
-    } else if (obj instanceof WidgetEntity)  {
+    } else if (obj instanceof MessageEntity)  {
       return widgetType;
     } else {
       return null;
@@ -94,7 +94,7 @@ const userType = new GraphQLObjectType({
       type: widgetConnection,
       description: 'A person\'s collection of widgets',
       args: connectionArgs,
-      resolve: (_, args) => connectionFromArray(getWidgets(), args),
+      resolve: (_, args) => connectionFromArray(getMessages(), args),
     },
   }),
   interfaces: [nodeInterface],
@@ -153,7 +153,7 @@ const messageMutation = mutationWithClientMutationId({
   outputFields: {
     message: {
       type: widgetType,
-      resolve: payload => getWidget(payload.messageId)
+      resolve: payload => getMessage(payload.messageId)
     },
     user: {
       type: userType,

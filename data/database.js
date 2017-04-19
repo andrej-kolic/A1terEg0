@@ -21,13 +21,13 @@ class Entity {
 
 // Model types
 class UserEntity extends Entity {}
-class WidgetEntity extends Entity {}
+class MessageEntity extends Entity {}
 
 // Mock data
 const viewer = new UserEntity({id: '1', name: 'Guest'});
 
-const widgets = ['W 1', 'W 2', 'W 3'].map((name, i) => (
-  new WidgetEntity({ id: `${i}`, name })
+const messages = ['W 1', 'W 2', 'W 3'].map((name, i) => (
+  new MessageEntity({ id: `${i}`, name })
 ));
 
 let widgetId = 4;
@@ -36,14 +36,14 @@ module.exports = {
   // Export methods that your schema can use to interact with your database
   getUser: (id) => id === viewer.id ? viewer : null,
   getViewer: () => viewer,
-  getWidget: (id) => widgets.find(w => w.id === id),
-  getWidgets: () => widgets,
+  getMessage: (id) => messages.find(w => w.id === id),
+  getMessages: () => messages,
   createMessage: (content, userId) => {
-    const message = new WidgetEntity({ id: widgetId++, name: content });
-    widgets.push(message);
+    const message = new MessageEntity({ id: widgetId++, name: content });
+    messages.push(message);
     // log.debug('***', message);
     return message;
   },
   UserEntity,
-  WidgetEntity,
+  MessageEntity,
 };
