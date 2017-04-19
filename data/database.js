@@ -15,7 +15,7 @@ const log = createLogger('server.schema');
 class Entity {
   constructor(payload){
     Object.assign(this, payload);
-    console.log(this);
+    // console.log(this);
   }
 }
 
@@ -26,8 +26,8 @@ class MessageEntity extends Entity {}
 // Mock data
 const viewer = new UserEntity({id: '1', name: 'Guest'});
 
-const messages = ['W 1', 'W 2', 'W 3'].map((content, i) => (
-  new MessageEntity({ id: `${i}`, content })
+const messages = Array(25).fill(1).map((_, i) => (
+  new MessageEntity({ id: `${i}`, content: `msg${i}` })
 ));
 
 let widgetId = 4;

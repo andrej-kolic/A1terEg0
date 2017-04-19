@@ -32,7 +32,10 @@ function startAppServer(callback) {
     contentBase: '/public/',
     proxy: {'/graphql': `http://localhost:${GRAPHQL_PORT}`},
     publicPath: '/js/',
-    stats: {colors: true}
+    stats: {
+      colors: true,
+      chunks: false
+    },
   });
   // Serve static resources
   appServer.use('/', express.static(path.resolve(__dirname, 'public')));
