@@ -31,13 +31,20 @@ import {
 
 import {
   // Import methods that your schema can use to interact with your database
-  User,
-  Widget,
+  UserEntity,
+  WidgetEntity,
   getUser,
   getViewer,
   getWidget,
   getWidgets,
+  createMessage,
 } from './database';
+
+
+import createLogger from './server-logger';
+
+const log = createLogger('server.schema');
+
 
 /**
  * We get the node interface and field from the Relay library.
@@ -45,9 +52,11 @@ import {
  * The first method defines the way we resolve an ID to its object.
  * The second defines the way we resolve an object to its GraphQL type.
  */
-var {nodeInterface, nodeField} = nodeDefinitions(
+
+const {nodeInterface, nodeField} = nodeDefinitions(
   (globalId) => {
-    var {type, id} = fromGlobalId(globalId);
+    log.debug('globalId:', globalId, fromGlobalId(globalId));
+    const {type, id} = fromGlobalId(globalId);
     if (type === 'User') {
       return getUser(id);
     } else if (type === 'Widget') {
@@ -57,9 +66,10 @@ var {nodeInterface, nodeField} = nodeDefinitions(
     }
   },
   (obj) => {
-    if (obj instanceof User) {
+    log.debug('obj:', obj);
+    if (obj instanceof UserEntity) {
       return userType;
-    } else if (obj instanceof Widget)  {
+    } else if (obj instanceof WidgetEntity)  {
       return widgetType;
     } else {
       return null;
@@ -71,11 +81,15 @@ var {nodeInterface, nodeField} = nodeDefinitions(
  * Define your own types here
  */
 
-var userType = new GraphQLObjectType({
+const userType = new GraphQLObjectType({
   name: 'User',
   description: 'A person who uses our app',
   fields: () => ({
     id: globalIdField('User'),
+    name: {
+      type: GraphQLString,
+      description: 'user name',
+    },
     widgets: {
       type: widgetConnection,
       description: 'A person\'s collection of widgets',
@@ -86,7 +100,7 @@ var userType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
-var widgetType = new GraphQLObjectType({
+const widgetType = new GraphQLObjectType({
   name: 'Widget',
   description: 'A shiny widget',
   fields: () => ({
@@ -102,14 +116,14 @@ var widgetType = new GraphQLObjectType({
 /**
  * Define your own connection types here
  */
-var {connectionType: widgetConnection} =
+const {connectionType: widgetConnection} =
   connectionDefinitions({name: 'Widget', nodeType: widgetType});
 
 /**
  * This is the type that will be the root of our query,
  * and the entry point into our schema.
  */
-var queryType = new GraphQLObjectType({
+const queryType = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
     node: nodeField,
@@ -121,14 +135,49 @@ var queryType = new GraphQLObjectType({
   }),
 });
 
+
+//
+// Mutations
+//
+
+const messageMutation = mutationWithClientMutationId({
+  name: 'CreateMessage',
+  inputFields: {
+    messageContent: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    userId: {
+      type: new GraphQLNonNull(GraphQLID)
+    }
+  },
+  outputFields: {
+    message: {
+      type: widgetType,
+      resolve: payload => getWidget(payload.messageId)
+    },
+    user: {
+      type: userType,
+      resolve: payload => getUser(payload.userId)
+    }
+  },
+  mutateAndGetPayload: ({ messageContent, userId }) => {
+    const newMessage = createMessage(messageContent, userId);
+    return {
+      messageId: newMessage.id,
+      userId,
+    };
+  }
+});
+
+
 /**
  * This is the type that will be the root of our mutations,
  * and the entry point into performing writes in our schema.
  */
-var mutationType = new GraphQLObjectType({
+const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
-    // Add your own mutations here
+    createMessage: messageMutation
   })
 });
 
@@ -136,8 +185,7 @@ var mutationType = new GraphQLObjectType({
  * Finally, we construct our schema (whose starting query type is the query
  * type we defined above) and export it.
  */
-export var Schema = new GraphQLSchema({
+export const Schema = new GraphQLSchema({
   query: queryType,
-  // Uncomment the following after adding some mutation fields:
-  // mutation: mutationType
+  mutation: mutationType
 });

@@ -7,21 +7,30 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+import createLogger from './server-logger';
+
+const log = createLogger('server.schema');
+
+
+class Entity {
+  constructor(payload){
+    Object.assign(this, payload);
+    console.log(this);
+  }
+}
+
 // Model types
-class User {}
-class Widget {}
+class UserEntity extends Entity {}
+class WidgetEntity extends Entity {}
 
 // Mock data
-var viewer = new User();
-viewer.id = '1';
-viewer.name = 'Anonymous';
+const viewer = new UserEntity({id: '1', name: 'Guest'});
 
-var widgets = ['What\'s-it', 'Who\'s-it', 'How\'s-it'].map((name, i) => {
-  var widget = new Widget();
-  widget.name = name;
-  widget.id = `${i}`;
-  return widget;
-});
+const widgets = ['W 1', 'W 2', 'W 3'].map((name, i) => (
+  new WidgetEntity({ id: `${i}`, name })
+));
+
+let widgetId = 4;
 
 module.exports = {
   // Export methods that your schema can use to interact with your database
@@ -29,6 +38,12 @@ module.exports = {
   getViewer: () => viewer,
   getWidget: (id) => widgets.find(w => w.id === id),
   getWidgets: () => widgets,
-  User,
-  Widget,
+  createMessage: (content, userId) => {
+    const message = new WidgetEntity({ id: widgetId++, name: content });
+    widgets.push(message);
+    // log.debug('***', message);
+    return message;
+  },
+  UserEntity,
+  WidgetEntity,
 };
