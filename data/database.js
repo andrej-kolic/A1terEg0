@@ -26,8 +26,8 @@ class MessageEntity extends Entity {}
 // Mock data
 const viewer = new UserEntity({id: '1', name: 'Guest'});
 
-const messages = ['W 1', 'W 2', 'W 3'].map((name, i) => (
-  new MessageEntity({ id: `${i}`, name })
+const messages = ['W 1', 'W 2', 'W 3'].map((content, i) => (
+  new MessageEntity({ id: `${i}`, content })
 ));
 
 let widgetId = 4;
@@ -39,7 +39,7 @@ module.exports = {
   getMessage: (id) => messages.find(w => w.id === id),
   getMessages: () => messages,
   createMessage: (content, userId) => {
-    const message = new MessageEntity({ id: widgetId++, name: content });
+    const message = new MessageEntity({ id: widgetId++, content });
     messages.push(message);
     // log.debug('***', message);
     return message;

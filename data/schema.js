@@ -59,7 +59,7 @@ const {nodeInterface, nodeField} = nodeDefinitions(
     const {type, id} = fromGlobalId(globalId);
     if (type === 'User') {
       return getUser(id);
-    } else if (type === 'Widget') {
+    } else if (type === 'Message') {
       return getMessage(id);
     } else {
       return null;
@@ -70,7 +70,7 @@ const {nodeInterface, nodeField} = nodeDefinitions(
     if (obj instanceof UserEntity) {
       return userType;
     } else if (obj instanceof MessageEntity)  {
-      return widgetType;
+      return messageType;
     } else {
       return null;
     }
@@ -90,9 +90,9 @@ const userType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'user name',
     },
-    widgets: {
-      type: widgetConnection,
-      description: 'A person\'s collection of widgets',
+    messages: {
+      type: messageConnection,
+      description: 'A person\'s messages',
       args: connectionArgs,
       resolve: (_, args) => connectionFromArray(getMessages(), args),
     },
@@ -100,29 +100,32 @@ const userType = new GraphQLObjectType({
   interfaces: [nodeInterface],
 });
 
-const widgetType = new GraphQLObjectType({
-  name: 'Widget',
-  description: 'A shiny widget',
+const messageType = new GraphQLObjectType({
+  name: 'Message',
+  description: 'User message',
   fields: () => ({
-    id: globalIdField('Widget'),
-    name: {
+    id: globalIdField('Message'),
+    content: {
       type: GraphQLString,
-      description: 'The name of the widget',
+      description: 'Content of message',
     },
   }),
   interfaces: [nodeInterface],
 });
 
-/**
- * Define your own connection types here
- */
-const {connectionType: widgetConnection} =
-  connectionDefinitions({name: 'Widget', nodeType: widgetType});
 
-/**
- * This is the type that will be the root of our query,
- * and the entry point into our schema.
- */
+//
+// connections
+//
+
+const {connectionType: messageConnection} =
+  connectionDefinitions({name: 'Message', nodeType: messageType});
+
+
+//
+// root query
+//
+
 const queryType = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
@@ -152,7 +155,7 @@ const messageMutation = mutationWithClientMutationId({
   },
   outputFields: {
     message: {
-      type: widgetType,
+      type: messageType,
       resolve: payload => getMessage(payload.messageId)
     },
     user: {

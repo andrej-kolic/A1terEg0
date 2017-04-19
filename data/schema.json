@@ -102,7 +102,7 @@
             },
             {
               "kind": "OBJECT",
-              "name": "Widget",
+              "name": "Message",
               "ofType": null
             }
           ]
@@ -141,8 +141,8 @@
               "deprecationReason": null
             },
             {
-              "name": "widgets",
-              "description": "A person's collection of widgets",
+              "name": "messages",
+              "description": "A person's messages",
               "args": [
                 {
                   "name": "after",
@@ -187,7 +187,7 @@
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "WidgetConnection",
+                "name": "MessageConnection",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -227,7 +227,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "WidgetConnection",
+          "name": "MessageConnection",
           "description": "A connection to a list of items.",
           "fields": [
             {
@@ -255,7 +255,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "WidgetEdge",
+                  "name": "MessageEdge",
                   "ofType": null
                 }
               },
@@ -347,7 +347,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "WidgetEdge",
+          "name": "MessageEdge",
           "description": "An edge in a connection.",
           "fields": [
             {
@@ -356,7 +356,7 @@
               "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "Widget",
+                "name": "Message",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -386,8 +386,8 @@
         },
         {
           "kind": "OBJECT",
-          "name": "Widget",
-          "description": "A shiny widget",
+          "name": "Message",
+          "description": "User message",
           "fields": [
             {
               "name": "id",
@@ -406,8 +406,8 @@
               "deprecationReason": null
             },
             {
-              "name": "name",
-              "description": "The name of the widget",
+              "name": "content",
+              "description": "Content of message",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -527,7 +527,7 @@
               "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "Widget",
+                "name": "Message",
                 "ofType": null
               },
               "isDeprecated": false,
