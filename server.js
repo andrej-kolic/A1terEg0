@@ -16,7 +16,7 @@ let appServer;
 function startAppServer(callback) {
   // Serve the Relay app
   const compiler = webpack({
-    entry: path.resolve(__dirname, 'js', 'app.js'),
+    entry: path.resolve(__dirname, 'js', 'app/app.js'),
     module: {
       loaders: [
         {

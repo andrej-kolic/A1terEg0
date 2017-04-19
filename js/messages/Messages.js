@@ -2,10 +2,10 @@ import React from 'react';
 import Relay from 'react-relay';
 import createLogger from '../logger';
 
-const log = createLogger('components.App');
+const log = createLogger('components.Messages');
 
 
-class App extends React.Component {
+class Messages extends React.Component {
   render() {
     return (
       <div>
@@ -15,13 +15,18 @@ class App extends React.Component {
             <li key={edge.node.id}>{edge.node.content} (ID: {edge.node.id})</li>
           )}
         </ul>
-        <button disabled={!this.props.viewer.messages.pageInfo.hasNextPage} onClick={ () => this._loadMore() }>more...</button>
+        <button
+          disabled={!this.props.viewer.messages.pageInfo.hasNextPage}
+          onClick={ () => this._loadMore() }>
+          more...
+        </button>
       </div>
     );
   }
 
   _loadMore() {
     log.debug('_loadMore', this.props.viewer);
+    if(!this.props.viewer.messages.pageInfo.hasNextPage) return;
     // Increments the number of stories being rendered by 10.
     this.props.relay.setVariables({
       count: this.props.relay.variables.count + 10
@@ -29,7 +34,7 @@ class App extends React.Component {
   }
 }
 
-export default Relay.createContainer(App, {
+export default Relay.createContainer(Messages, {
   initialVariables: { count: 10 },
   fragments: {
     viewer: () => Relay.QL`

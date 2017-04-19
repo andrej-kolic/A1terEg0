@@ -53,10 +53,10 @@ const log = createLogger('server.schema');
  * The second defines the way we resolve an object to its GraphQL type.
  */
 
-const {nodeInterface, nodeField} = nodeDefinitions(
+const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId) => {
     log.debug('globalId:', globalId, fromGlobalId(globalId));
-    const {type, id} = fromGlobalId(globalId);
+    const { type, id } = fromGlobalId(globalId);
     if (type === 'User') {
       return getUser(id);
     } else if (type === 'Message') {
@@ -69,7 +69,7 @@ const {nodeInterface, nodeField} = nodeDefinitions(
     log.debug('obj:', obj);
     if (obj instanceof UserEntity) {
       return userType;
-    } else if (obj instanceof MessageEntity)  {
+    } else if (obj instanceof MessageEntity) {
       return messageType;
     } else {
       return null;
@@ -77,9 +77,10 @@ const {nodeInterface, nodeField} = nodeDefinitions(
   }
 );
 
-/**
- * Define your own types here
- */
+
+//
+// custom types
+//
 
 const userType = new GraphQLObjectType({
   name: 'User',
@@ -94,7 +95,10 @@ const userType = new GraphQLObjectType({
       type: messageConnection,
       description: 'A person\'s messages',
       args: connectionArgs,
-      resolve: (_, args) => connectionFromArray(getMessages(), args),
+      resolve: (_, args) => {
+        const messages = getMessages();   // TODO: for logged user only
+        return { ...connectionFromArray(getMessages(), args), count: getMessages().length };
+      },
     },
   }),
   interfaces: [nodeInterface],
@@ -118,8 +122,18 @@ const messageType = new GraphQLObjectType({
 // connections
 //
 
-const {connectionType: messageConnection} =
-  connectionDefinitions({name: 'Message', nodeType: messageType});
+const { connectionType: messageConnection } =
+  connectionDefinitions({
+    connectionFields: {
+      count: {
+        type: GraphQLInt,
+        description: 'Total number of messages',
+        resolve: connection => connection.count,
+      },
+    },
+    name: 'Message',
+    nodeType: messageType
+  });
 
 
 //
