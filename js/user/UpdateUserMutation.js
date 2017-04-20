@@ -4,6 +4,11 @@ import createLogger from '../logger';
 const log = createLogger('user.UpdateUserMutation');
 
 export default class UpdateUserMutation extends Relay.Mutation {
+
+  static fragments = {
+    viewer: () => Relay.QL` fragment on User { id }`,
+  };
+
   getMutation() {
     return Relay.QL`mutation {updateViewer}`;
   }
@@ -31,13 +36,4 @@ export default class UpdateUserMutation extends Relay.Mutation {
       },
     }];
   }
-
-  static fragments = {
-    viewer: () => Relay.QL`
-      fragment on User {
-        id,
-        name,
-      }
-    `,
-  };
 }

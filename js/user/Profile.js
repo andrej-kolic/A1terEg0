@@ -18,12 +18,12 @@ class Profile extends React.Component {
         <hr/>
 
         <input type="text" ref={(input) => this.userName = input} />
-        <button onClick={this.updateUser}>Update</button>
+        <button onClick={this._updateUser}>Update</button>
       </div>
     );
   }
 
-  updateUser = () => {
+  _updateUser = () => {
     log.debug('updateViewer:', this.userName.value);
     this.props.relay.commitUpdate(
       new UpdateUserMutation({viewer: this.props.viewer, userName: this.userName.value })
@@ -37,6 +37,7 @@ export default Relay.createContainer(Profile, {
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
+        ${UpdateUserMutation.getFragment('viewer')}
         name,
         messages(last: 1) {
           count

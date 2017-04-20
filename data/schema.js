@@ -30,6 +30,7 @@ import {
   getMessage,
   getMessages,
   createMessage,
+  updateMessage,
   removeMessage,
 } from './database';
 
@@ -211,6 +212,30 @@ const createMessageMutation = mutationWithClientMutationId({
 });
 
 
+const updateMessageMutation = mutationWithClientMutationId({
+  name: 'UpdateMessage',
+  inputFields: {
+    id: { type: new GraphQLNonNull(GraphQLID) },
+    messageContent: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    viewer: {
+      type: userType,
+      resolve: payload => getViewer()
+    },
+    message: {
+      type: messageType,
+      resolve: ({ localMessageId }) => getMessage(localMessageId),
+    }
+  },
+  mutateAndGetPayload: ({id, messageContent}) => {
+    const localMessageId = fromGlobalId(id).id;
+    updateMessage(localMessageId, messageContent);
+    return {localMessageId};
+  }
+});
+
+
 const removeMessageMutation = mutationWithClientMutationId({
   name: 'RemoveMessage',
   inputFields: {
@@ -243,6 +268,7 @@ const mutationType = new GraphQLObjectType({
   fields: () => ({
     createMessage: createMessageMutation,
     removeMessage: removeMessageMutation,
+    updateMessage: updateMessageMutation,
     updateViewer: updateViewerMutation,
   })
 });

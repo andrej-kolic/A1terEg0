@@ -15,7 +15,6 @@ const log = createLogger('server.schema');
 class Entity {
   constructor(payload){
     Object.assign(this, payload);
-    // console.log(this);
   }
 }
 
@@ -46,7 +45,14 @@ module.exports = {
   createMessage: (content, userId) => {
     const message = new MessageEntity({ id: widgetId++, content });
     messages.push(message);
-    // log.debug('***', message);
+    log.debug('created message:', message);
+    return message;
+  },
+  updateMessage: (id, content) => {
+    log.debug('updateMessage:', id, content);
+    const message = module.exports.getMessage(id);
+    Object.assign(message, { content });
+    log.debug('updated message:', message);
     return message;
   },
   removeMessage: (messageId) => {

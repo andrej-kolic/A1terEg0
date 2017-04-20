@@ -6,7 +6,6 @@ const log = createLogger('message.RemoveMessageMutation');
 export default class RemoveMessageMutation extends Relay.Mutation {
 
   static fragments = {
-    // message: () => Relay.QL` fragment on Message { id } `,
     viewer: () => Relay.QL` fragment on User { id } `,
   };
 
