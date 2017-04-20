@@ -9,14 +9,13 @@ const log = createLogger('app.Frame');
 class Frame extends React.Component {
   render() {
     return (
-      <div>
-        <ul>
-          <li><Link to="/profile">Profile</Link></li>
-          <li><Link to="/messages">Messages</Link></li>
-        </ul>
+      <div style={{height: '100%'}}>
+        <div style={{position: 'absolute', right: 0}}>
+          <Link to="/profile"><span style={{padding: 5}}>Profile</span></Link>
+          <Link to="/messages"><span style={{padding: 5}}>Messages</span></Link>
+        </div>
 
-        <hr/>
-        <div>{this.props.children}</div>
+        {this.props.children}
       </div>
     );
   }

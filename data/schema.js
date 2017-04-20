@@ -85,6 +85,10 @@ const userType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'user name',
     },
+    avatar: {
+      type: GraphQLString,
+      description: 'profile image',
+    },
     messages: {
       type: messageConnection,
       description: 'A person\'s messages',

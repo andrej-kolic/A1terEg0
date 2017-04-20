@@ -23,11 +23,20 @@ class UserEntity extends Entity {}
 class MessageEntity extends Entity {}
 
 // Mock data
-const viewer = new UserEntity({id: '1', name: 'Guest'});
+const viewer = new UserEntity({
+  id: '1',
+  name: 'Guest',
+  avatar: 'https://opensource.ncsa.illinois.edu/jira/secure/useravatar?size=small&avatarId=12848'
+});
 
-const messages = Array(25).fill(1).map((_, i) => (
+const messages = Array(100).fill(1).map((_, i) => (
   new MessageEntity({ id: `${i}`, content: `msg${i}` })
 ));
+messages.push(new MessageEntity({
+  id: `999`,
+  content: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book`,
+}));
+
 
 let widgetId = 4;
 

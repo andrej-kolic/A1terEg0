@@ -4,11 +4,33 @@ import createLogger from '../logger';
 import CreateMessageMutation from './CreateMessageMutation';
 import UpdateMessageMutation from './UpdateMessageMutation';
 import RemoveMessageMutation from './RemoveMessageMutation';
+import MessageList from './MessageList';
+
 
 const log = createLogger('components.Messages');
+const MESSAGES_PAGE_SIZE = 40;
+
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  header: {},
+  content: {
+    overflowX: 'auto',
+  },
+
+  footer: {
+    padding: 10
+  }
+};
 
 
 class Messages extends React.Component {
+
+  posts = [];
 
   constructor(props) {
     super(props);
@@ -17,26 +39,24 @@ class Messages extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>Messages</h1>
+      <div style={styles.container}>
+        <div style={styles.header}>
+          <h1>Messages</h1>
+        </div>
 
-        <input type="text" ref={(input) => this.messageInput = input} />
-        <button onClick={this._postMessage}>Post</button>
+        <div style={styles.content}>
+        <MessageList viewer={this.props.viewer}
+                     onStartEditing={this._startEditingMessage}
+                     onDelete={this._deleteMessage}
+                     onLoadMore={this._loadMore}
+        />
+        </div>
 
-        <ul>
-          {this.props.viewer.messages.edges.map(edge =>
-            <li key={edge.node.id}>
-              {edge.node.content} (ID: {edge.node.id})
-              <button onClick={() => this._startEditingMessage(edge.node)}>edit</button>
-              <button onClick={() => this._deleteMessage(edge.node.id)}>del</button>
-            </li>
-          )}
-        </ul>
-        <button
-          disabled={!this.props.viewer.messages.pageInfo.hasPreviousPage}
-          onClick={this._loadMore}>
-          more...
-        </button>
+        <div style={styles.footer}>
+          <input type="text" ref={(input) => this.messageInput = input} />
+          <button onClick={this._postMessage}>Post</button>
+        </div>
+
       </div>
     );
   }
@@ -55,7 +75,7 @@ class Messages extends React.Component {
         viewer: this.props.viewer,
         messageContent: this.messageInput.value
       })
-    )
+    );
   };
 
   _startEditingMessage = (message) => {
@@ -73,7 +93,7 @@ class Messages extends React.Component {
       })
     );
     this.setState({ currentMessage: null });
-     this.messageInput.value = '';
+    this.messageInput.value = '';
   };
 
   _postMessage = () => {
@@ -88,19 +108,19 @@ class Messages extends React.Component {
   _loadMore = () => {
     log.debug('_loadMore', this.props.viewer);
     if (!this.props.viewer.messages.pageInfo.hasPreviousPage) return;
-    // Increments the number of messages being rendered by 10.
     this.props.relay.setVariables({
-      count: this.props.relay.variables.count + 10
+      count: this.props.relay.variables.count + MESSAGES_PAGE_SIZE
     });
   }
 }
 
 
 export default Relay.createContainer(Messages, {
-  initialVariables: { count: 10 },
+  initialVariables: { count: MESSAGES_PAGE_SIZE },
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
+        avatar,
         ${CreateMessageMutation.getFragment('viewer')},
         ${RemoveMessageMutation.getFragment('viewer')},
         messages(last: $count) {
