@@ -1,12 +1,3 @@
-/**
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
- */
-
 import {
   GraphQLBoolean,
   GraphQLFloat,
@@ -27,10 +18,10 @@ import {
   globalIdField,
   mutationWithClientMutationId,
   nodeDefinitions,
+  cursorForObjectInConnection,
 } from 'graphql-relay';
 
 import {
-  // Import methods that your schema can use to interact with your database
   UserEntity,
   MessageEntity,
   getUser,
@@ -123,7 +114,10 @@ const messageType = new GraphQLObjectType({
 // connections
 //
 
-const { connectionType: messageConnection } =
+const {
+  connectionType: messageConnection,
+  edgeType: MessageEdge
+} =
   connectionDefinitions({
     connectionFields: {
       count: {
@@ -181,31 +175,36 @@ const updateViewerMutation = mutationWithClientMutationId({
 });
 
 
-const messageMutation = mutationWithClientMutationId({
+const createMessageMutation = mutationWithClientMutationId({
   name: 'CreateMessage',
   inputFields: {
     messageContent: {
       type: new GraphQLNonNull(GraphQLString)
     },
-    userId: {
-      type: new GraphQLNonNull(GraphQLID)
-    }
   },
   outputFields: {
-    message: {
-      type: messageType,
-      resolve: payload => getMessage(payload.messageId)
+    newMessageEdge: {
+      type: MessageEdge,
+      resolve: (payload) => {
+        const message = getMessage(payload.messageId);
+        return {
+          cursor: cursorForObjectInConnection(
+            getMessages(),
+            message
+          ),
+          node: message,
+        };
+      },
     },
-    user: {
+    viewer: {
       type: userType,
-      resolve: payload => getUser(payload.userId)
-    },
+      resolve: payload => getViewer()
+    }
   },
-  mutateAndGetPayload: ({ messageContent, userId }) => {
-    const newMessage = createMessage(messageContent, userId);
+  mutateAndGetPayload: ({ messageContent }) => {
+    const newMessage = createMessage(messageContent, getViewer().id);
     return {
       messageId: newMessage.id,
-      userId,
     };
   }
 });
@@ -218,10 +217,11 @@ const messageMutation = mutationWithClientMutationId({
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
-    createMessage: messageMutation,
+    createMessage: createMessageMutation,
     updateViewer: updateViewerMutation,
   })
 });
+
 
 /**
  * Finally, we construct our schema (whose starting query type is the query
