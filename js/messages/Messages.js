@@ -8,7 +8,7 @@ import MessageList from './MessageList';
 
 
 const log = createLogger('components.Messages');
-const MESSAGES_PAGE_SIZE = 40;
+const MESSAGES_PAGE_SIZE = 10;
 
 
 const styles = {
@@ -20,10 +20,24 @@ const styles = {
   header: {},
   content: {
     overflowX: 'auto',
+    flex: 'auto',
   },
 
   footer: {
-    padding: 10
+    padding: 10,
+    display: 'flex',
+    backgroundColor: 'white',
+  },
+  textInput: {
+    flexGrow: 1,
+    borderWidth: 0,
+    fontSize: 18,
+    marginRight: 10,
+  },
+  sendButton: {
+    border: 0,
+    background: 'none',
+    paddingRight: 20,
   }
 };
 
@@ -34,27 +48,46 @@ class Messages extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { currentMessage: null }
+    this.state = { currentMessage: null, loadMore: false }
+  }
+
+  componentDidMount() {
+    this.messageInput.focus();
+  }
+
+  componentDidUpdate() {
+    log.debug('componentDidUpdate');
+    this.messageInput.focus();
   }
 
   render() {
     return (
       <div style={styles.container}>
-        <div style={styles.header}>
-          <h1>Messages</h1>
-        </div>
-
         <div style={styles.content}>
-        <MessageList viewer={this.props.viewer}
-                     onStartEditing={this._startEditingMessage}
-                     onDelete={this._deleteMessage}
-                     onLoadMore={this._loadMore}
-        />
+          <MessageList viewer={this.props.viewer}
+                       onStartEditing={this._startEditingMessage}
+                       onDelete={this._deleteMessage}
+                       onLoadMore={this._loadMore}
+                       loadMore={this.state.loadMore}
+          />
         </div>
 
         <div style={styles.footer}>
-          <input type="text" ref={(input) => this.messageInput = input} />
-          <button onClick={this._postMessage}>Post</button>
+          {/*<input type="text" ref={(input) => this.messageInput = input} />*/}
+          <textarea ref={(input) => this.messageInput = input}
+                    rows="3"
+                    style={styles.textInput}
+                    placeholder="Send a message"
+                    onKeyUp={(e) => {
+                      if (e.keyCode === 13) {
+                        e.preventDefault();
+                        this._postMessage();
+                        return false;
+                      }
+                    }}
+          >
+          </textarea>
+          <button onClick={this._postMessage} className="fa fa-send fa-2x" style={styles.sendButton} />
         </div>
 
       </div>
@@ -70,6 +103,7 @@ class Messages extends React.Component {
 
   _createMessage = () => {
     log.debug('_createMessage:', this.messageInput.value);
+    this.setState({ loadMore: false });
     this.props.relay.commitUpdate(
       new CreateMessageMutation({
         viewer: this.props.viewer,
@@ -103,9 +137,11 @@ class Messages extends React.Component {
     } else {
       this._createMessage();
     }
+    this.messageInput.value = '';
   };
 
   _loadMore = () => {
+    this.setState({ loadMore: true });
     log.debug('_loadMore', this.props.viewer);
     if (!this.props.viewer.messages.pageInfo.hasPreviousPage) return;
     this.props.relay.setVariables({

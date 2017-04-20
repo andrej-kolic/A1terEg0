@@ -29,7 +29,7 @@ const viewer = new UserEntity({
   avatar: 'https://opensource.ncsa.illinois.edu/jira/secure/useravatar?size=small&avatarId=12848'
 });
 
-const messages = Array(100).fill(1).map((_, i) => (
+const messages = Array(5).fill(1).map((_, i) => (
   new MessageEntity({ id: `${i}`, content: `msg${i}` })
 ));
 messages.push(new MessageEntity({

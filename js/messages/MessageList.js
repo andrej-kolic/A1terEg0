@@ -23,49 +23,48 @@ export default class MessageList extends React.Component {
 
   posts = [];
 
-  constructor(props) {
-    super(props);
-    this.state = { loadMore: false }
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = { loadMore: this.props.loadMore }
+  // }
 
   componentDidMount() {
     this._scrollToLast();
   }
 
   componentDidUpdate() {
+    log.debug('componentDidUpdate');
     this._scrollToLast();
   }
 
   render() {
     return (
-        <div style={styles.messageList}>
-          <div>
-            <button
-              disabled={!this.props.viewer.messages.pageInfo.hasPreviousPage}
-              onClick={() => {
-                this.setState({loadMore: true});
-                this.props.onLoadMore();
-              }}>
-              more...
-            </button>
-          </div>
-          {this.props.viewer.messages.edges.map((edge, index) =>
-            <Post key={edge.node.id}
-                  viewer={this.props.viewer}
-                  message={edge.node}
-                  onStartEditing={this.props.onStartEditing}
-                  onDelete={this.props.onDelete}
-                  ref={(ref) => this.posts[index] = ref}
-            />
-          )}
+      <div style={styles.messageList}>
+        <div>
+          <button
+            disabled={!this.props.viewer.messages.pageInfo.hasPreviousPage}
+            onClick={ this.props.onLoadMore }>
+            more...
+          </button>
         </div>
+        {this.props.viewer.messages.edges.map((edge, index) =>
+          <Post key={edge.node.id}
+                viewer={this.props.viewer}
+                message={edge.node}
+                onStartEditing={this.props.onStartEditing}
+                onDelete={this.props.onDelete}
+                ref={(ref) => this.posts = ref}
+          />
+        )}
+      </div>
     );
   }
 
   _scrollToLast = () => {
-    const len = this.posts.length - 1;
-    const node = ReactDOM.findDOMNode(this.posts[len]);
-    log.debug('_scrollToLast', this.state.loadMore, node, this.posts, len);
+    if (this.props.loadMore) return;
+    // const len = this.posts.length - 1;
+    const node = ReactDOM.findDOMNode(this.posts);
+    log.debug('_scrollToLast', this.props.loadMore, node, this.posts);
     if (node) {
       node.scrollIntoView();
     }
