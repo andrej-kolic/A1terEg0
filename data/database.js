@@ -36,6 +36,11 @@ module.exports = {
   // Export methods that your schema can use to interact with your database
   getUser: (id) => id === viewer.id ? viewer : null,
   getViewer: () => viewer,
+  updateViewer: (payload) => {
+    Object.assign(viewer, payload);
+    return viewer;
+  },
+
   getMessage: (id) => messages.find(w => w.id === id),
   getMessages: () => messages,
   createMessage: (content, userId) => {

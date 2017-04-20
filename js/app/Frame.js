@@ -20,15 +20,6 @@ class Frame extends React.Component {
       </div>
     );
   }
-
-  _loadMore() {
-    log.debug('_loadMore', this.props.viewer);
-    if(!this.props.viewer.messages.pageInfo.hasNextPage) return;
-    // Increments the number of stories being rendered by 10.
-    this.props.relay.setVariables({
-      count: this.props.relay.variables.count + 10
-    });
-  }
 }
 
 export default Relay.createContainer(Frame, {

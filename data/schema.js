@@ -35,6 +35,7 @@ import {
   MessageEntity,
   getUser,
   getViewer,
+  updateViewer,
   getMessage,
   getMessages,
   createMessage,
@@ -157,6 +158,29 @@ const queryType = new GraphQLObjectType({
 // Mutations
 //
 
+const updateViewerMutation = mutationWithClientMutationId({
+  name: 'UpdateViewer',
+  inputFields: {
+    name: {
+      type: new GraphQLNonNull(GraphQLString)
+    }
+  },
+  outputFields: {
+    viewer: {
+      type: userType,
+      resolve: payload => getViewer()
+    }
+  },
+  mutateAndGetPayload: (input) => {
+    const viewer = updateViewer(input);
+    log.debug('updated viewer:', viewer);
+    return {
+      viewer,
+    };
+  }
+});
+
+
 const messageMutation = mutationWithClientMutationId({
   name: 'CreateMessage',
   inputFields: {
@@ -175,7 +199,7 @@ const messageMutation = mutationWithClientMutationId({
     user: {
       type: userType,
       resolve: payload => getUser(payload.userId)
-    }
+    },
   },
   mutateAndGetPayload: ({ messageContent, userId }) => {
     const newMessage = createMessage(messageContent, userId);
@@ -194,7 +218,8 @@ const messageMutation = mutationWithClientMutationId({
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
-    createMessage: messageMutation
+    createMessage: messageMutation,
+    updateViewer: updateViewerMutation,
   })
 });
 

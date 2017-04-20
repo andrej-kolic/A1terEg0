@@ -27,7 +27,7 @@ class Messages extends React.Component {
   _loadMore() {
     log.debug('_loadMore', this.props.viewer);
     if(!this.props.viewer.messages.pageInfo.hasNextPage) return;
-    // Increments the number of stories being rendered by 10.
+    // Increments the number of messages being rendered by 10.
     this.props.relay.setVariables({
       count: this.props.relay.variables.count + 10
     });
