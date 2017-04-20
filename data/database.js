@@ -49,6 +49,11 @@ module.exports = {
     // log.debug('***', message);
     return message;
   },
+  removeMessage: (messageId) => {
+    const index = messages.findIndex(m => m.id === messageId);
+    log.debug('messageIndex', messageId);
+    messages.splice(index, 1);
+  },
   UserEntity,
   MessageEntity,
 };

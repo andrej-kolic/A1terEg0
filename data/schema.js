@@ -30,6 +30,7 @@ import {
   getMessage,
   getMessages,
   createMessage,
+  removeMessage,
 } from './database';
 
 
@@ -210,6 +211,29 @@ const createMessageMutation = mutationWithClientMutationId({
 });
 
 
+const removeMessageMutation = mutationWithClientMutationId({
+  name: 'RemoveMessage',
+  inputFields: {
+    id: { type: new GraphQLNonNull(GraphQLID) },
+  },
+  outputFields: {
+    deletedMessageId: {
+      type: GraphQLID,
+      resolve: ({id}) => id,
+    },
+    viewer: {
+      type: userType,
+      resolve: () => getViewer(),
+    },
+  },
+  mutateAndGetPayload: ({id}) => {
+    const localMessageId = fromGlobalId(id).id;
+    removeMessage(localMessageId);
+    return {id};
+  },
+});
+
+
 /**
  * This is the type that will be the root of our mutations,
  * and the entry point into performing writes in our schema.
@@ -218,6 +242,7 @@ const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
     createMessage: createMessageMutation,
+    removeMessage: removeMessageMutation,
     updateViewer: updateViewerMutation,
   })
 });

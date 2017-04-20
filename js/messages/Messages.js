@@ -2,6 +2,7 @@ import React from 'react';
 import Relay from 'react-relay';
 import createLogger from '../logger';
 import CreateMessageMutation from './CreateMessageMutation';
+import RemoveMessageMutation from './RemoveMessageMutation';
 
 const log = createLogger('components.Messages');
 
@@ -17,7 +18,10 @@ class Messages extends React.Component {
 
         <ul>
           {this.props.viewer.messages.edges.map(edge =>
-            <li key={edge.node.id}>{edge.node.content} (ID: {edge.node.id})</li>
+            <li key={edge.node.id}>
+              {edge.node.content} (ID: {edge.node.id})
+              <button onClick={() => this._deleteMessage(edge.node.id)}>del</button>
+            </li>
           )}
         </ul>
         <button
@@ -28,6 +32,13 @@ class Messages extends React.Component {
       </div>
     );
   }
+
+  _deleteMessage = (messageId) => {
+    log.debug('_deleteMessage', messageId);
+    this.props.relay.commitUpdate(
+      new RemoveMessageMutation({viewer: this.props.viewer, messageId })
+    )
+  };
 
   _postMessage = () => {
     log.debug('_postMessage:', this.messageInput.value);
