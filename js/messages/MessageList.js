@@ -11,13 +11,6 @@ export default class MessageList extends React.Component {
 
   posts = [];
 
-  // constructor(props){
-  //   super(props);
-  //   this.state = {
-  //     shouldScroll: !this.props.preventScroll
-  //   }
-  // }
-
   componentDidMount() {
     this._scrollToLast();
   }
@@ -70,7 +63,7 @@ export default class MessageList extends React.Component {
 
 const styles = {
   messageList: {
-    padding: 10,
+    padding: '10px 15px',
     overflowY: 'auto',
   },
   loadMoreButton: {

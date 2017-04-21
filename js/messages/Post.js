@@ -14,7 +14,6 @@ export default class Post extends React.Component {
   getDateDescription = () => moment(this.props.message.createdAt * 1000).fromNow();
 
   componentDidMount() {
-    log.debug('componentDidMount');
     this.timerId = setInterval(
       () => this.setState({ dateDescription: this.getDateDescription() }),
       30000
