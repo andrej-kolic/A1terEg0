@@ -11,13 +11,22 @@ class Frame extends React.Component {
     return (
       <div style={styles.container}>
         <div style={styles.header}>
-          <div style={{ flex: 'auto', fontSize: 26}}>
+          <div style={{ fontSize: 26 }}>
+            A1terEg0
+          </div>
+
+          <div style={{ fontSize: 26 }}>
             {this.props.viewer.name} · {this.props.viewer.messages.count}
           </div>
 
-          <Link to="/messages"><button style={{ ...styles.button, fontSize: 18 }} className="fa fa-envelope"/></Link>
-
-          <Link to="/profile"><button style={styles.button} className="fa fa-user"/></Link>
+          <div>
+            <Link to="/messages">
+              <button style={{ ...styles.button, fontSize: 18 }} className="fa fa-envelope" />
+            </Link>
+            <Link to="/profile">
+              <button style={styles.button} className="fa fa-user" />
+            </Link>
+          </div>
         </div>
 
         {this.props.children}
@@ -58,6 +67,7 @@ const styles = {
     boxShadow: '0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28)',
     zIndex: 100,
     alignItems: 'center',
+    justifyContent: 'space-between'
   },
   button: {
     color: 'white',
