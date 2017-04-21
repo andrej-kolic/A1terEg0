@@ -52,6 +52,10 @@ class Messages extends React.Component {
                         e.preventDefault();
                         this._postMessage();
                         return false;
+                      } else if (e.keyCode === 27) {
+                        e.preventDefault();
+                        this._clearInput();
+                        return false;
                       }
                     }}
                     onChange={(e) => this.setState({ inputText: e.target.value, preventScroll: true })}
@@ -115,6 +119,7 @@ class Messages extends React.Component {
 
   _postMessage = () => {
     log.debug('_postMessage:');
+    if(!this.state.inputText || !this.state.inputText.trim().length) return;
 
     if (this.state.currentMessage) {
       this._updateMessage();

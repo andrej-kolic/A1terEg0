@@ -33,7 +33,11 @@ export default class MessageList extends React.Component {
           <button
             disabled={!this.props.viewer.messages.pageInfo.hasPreviousPage}
             onClick={ this.props.onLoadMore }
-            style={styles.loadMoreButton}
+            style={{
+              ...styles.loadMoreButton,
+              visibility: this.props.viewer.messages.pageInfo.hasPreviousPage
+                ? 'visible' : 'hidden'
+            }}
           >
             ^ Older ^
           </button>

@@ -57,7 +57,7 @@ class Profile extends React.Component {
         userAvatar: this.state.userAvatar,
       })
     );
-    this.setState({ userName: '', avatar: '' });
+    // this.setState({ userName: '', avatar: '' });
   }
 }
 

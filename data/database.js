@@ -37,15 +37,23 @@ const viewer = new UserEntity({
   avatar: 'https://opensource.ncsa.illinois.edu/jira/secure/useravatar?size=small&avatarId=12848'
 });
 
-const messages = Array(100).fill(1).map((_, i) => (
-  new MessageEntity({ id: `${i}`, content: `msg${i}` })
-));
+let messages = [];
+// messages = Array(100).fill(1).map((_, i) => (
+//   new MessageEntity({ content: `msg${i}` })
+// ));
 messages.push(new MessageEntity({
-  id: `999`,
+  content: `A foo walks into a bar...`,
+}));
+messages.push(new MessageEntity({
+  content: `...takes a look around...`,
+}));
+messages.push(new MessageEntity({
+  content: `...and says 'Hello World!'`,
+}));
+messages.push(new MessageEntity({
   content: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book`,
 }));
 
-// const messages = [];
 
 module.exports = {
   // Export methods that your schema can use to interact with your database
