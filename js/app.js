@@ -3,9 +3,9 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
-import Messages from '../messages/Messages';
-import Profile from '../user/Profile';
-import Frame from './Frame';
+import Messages from './messages/Messages';
+import Profile from './user/Profile';
+import Frame from './app/Frame';
 
 import { applyRouterMiddleware, Route } from 'react-router';
 import useRelay from 'react-router-relay';
