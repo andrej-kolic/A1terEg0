@@ -54,6 +54,7 @@ export default class MessageList extends React.Component {
                 onStartEditing={this.props.onStartEditing}
                 onDelete={this.props.onDelete}
                 ref={(ref) => this.posts = ref}
+                highlight={!!(this.props.currentMessage && this.props.currentMessage.id === edge.node.id)}
           />
         )}
       </div>
@@ -61,7 +62,7 @@ export default class MessageList extends React.Component {
   }
 
   _scrollToLast = () => {
-    if (this.props.loadMore) return;
+    if (! this.post || this.props.loadMore) return;
     // const len = this.posts.length - 1;
     const node = ReactDOM.findDOMNode(this.posts);
     log.debug('_scrollToLast', this.props.loadMore, node, this.posts);

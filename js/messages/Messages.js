@@ -8,7 +8,7 @@ import MessageList from './MessageList';
 
 
 const log = createLogger('components.Messages');
-const MESSAGES_PAGE_SIZE = 10;
+const MESSAGES_PAGE_SIZE = 40;
 
 
 const styles = {
@@ -69,6 +69,7 @@ class Messages extends React.Component {
                        onDelete={this._deleteMessage}
                        onLoadMore={this._loadMore}
                        loadMore={this.state.loadMore}
+                       currentMessage={this.state.currentMessage}
           />
         </div>
 
@@ -78,7 +79,7 @@ class Messages extends React.Component {
                     rows="3"
                     style={styles.textInput}
                     placeholder="Send a message"
-                    onKeyUp={(e) => {
+                    onKeyDown={(e) => {
                       if (e.keyCode === 13) {
                         e.preventDefault();
                         this._postMessage();

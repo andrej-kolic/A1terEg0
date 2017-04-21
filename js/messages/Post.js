@@ -1,12 +1,16 @@
 import React from 'react';
+import createLogger from '../logger';
+
+const log = createLogger('components.Post');
 
 export default class Post extends React.Component {
   render() {
+    const highlightStyle = this.props.highlight ? styles.highlight : {};
     return (
       <div style={styles.container}>
         <img src={this.props.viewer.avatar} style={styles.avatar} />
         <div style={styles.messageContainer}>
-          <span style={styles.message}>{this.props.message.content}</span>
+          <span style={{ ...styles.message, ...highlightStyle }}>{this.props.message.content}</span>
         </div>
 
         <button
@@ -52,15 +56,21 @@ const styles = {
     wordWrap: 'break-word',
     overflow: 'hidden',
   },
+  highlight: {
+    backgroundColor: '#ffff91',
+  },
   messageButton: {
     border: 0,
     background: 'none',
     marginLeft: 10,
-    opacity: 0.5,
-    fontSize: 25,
-
+    opacity: 0.4,
+    fontSize: 16,
+    borderWidth: 1,
+    borderStyle: 'dotted',
+    width: 26,
+    height: 26,
+    borderRadius: 13,
   },
   messageButtonEdit: {
-    fontSize: 21,
   }
 };

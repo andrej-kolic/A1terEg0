@@ -13,8 +13,11 @@ const log = createLogger('server.schema');
 
 
 class Entity {
+  static idCounter = 1;
   constructor(payload){
-    Object.assign(this, payload);
+    Object.assign(this, payload, { id: `id-${this.constructor.idCounter}` });
+    log.debug('^^^', this);
+    this.constructor.idCounter += 1;
   }
 }
 
@@ -37,8 +40,7 @@ messages.push(new MessageEntity({
   content: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book`,
 }));
 
-
-let widgetId = 4;
+// const messages = [];
 
 module.exports = {
   // Export methods that your schema can use to interact with your database
@@ -52,7 +54,7 @@ module.exports = {
   getMessage: (id) => messages.find(w => w.id === id),
   getMessages: () => messages,
   createMessage: (content, userId) => {
-    const message = new MessageEntity({ id: widgetId++, content });
+    const message = new MessageEntity({ content });
     messages.push(message);
     log.debug('created message:', message);
     return message;
@@ -65,9 +67,15 @@ module.exports = {
     return message;
   },
   removeMessage: (messageId) => {
+    log.debug('remove message:', messageId, messages);
     const index = messages.findIndex(m => m.id === messageId);
-    log.debug('messageIndex', messageId);
+    log.debug('message index to remove:', index, messages);
+
+    log.error(`id ${messageId} not found`);
+    if(index === -1) throw new Error(`id ${messageId} not found`);
+
     messages.splice(index, 1);
+    log.debug('messages after removal', messages);
   },
   UserEntity,
   MessageEntity,
