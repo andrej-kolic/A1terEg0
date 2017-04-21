@@ -23,7 +23,6 @@ export default class MessageList extends React.Component {
   }
 
   componentDidUpdate() {
-    log.debug('componentDidUpdate');
     this._scrollToLast();
   }
 

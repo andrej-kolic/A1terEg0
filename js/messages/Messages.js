@@ -11,44 +11,13 @@ const log = createLogger('components.Messages');
 const MESSAGES_PAGE_SIZE = 40;
 
 
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-  },
-  header: {},
-  content: {
-    overflowX: 'auto',
-    flex: 'auto',
-  },
-  footer: {
-    padding: 10,
-    display: 'flex',
-    backgroundColor: 'white',
-    flexShrink: 0,
-  },
-  textInput: {
-    flexGrow: 1,
-    borderWidth: 0,
-    fontSize: 18,
-    marginRight: 10,
-  },
-  sendButton: {
-    border: 0,
-    background: 'none',
-    paddingRight: 20,
-  }
-};
-
-
 class Messages extends React.Component {
 
   posts = [];
 
   constructor(props) {
     super(props);
-    this.state = { currentMessage: null, preventScroll: false }
+    this.state = { currentMessage: null, preventScroll: false, inputText: '' }
   }
 
   componentDidMount() {
@@ -56,7 +25,6 @@ class Messages extends React.Component {
   }
 
   componentDidUpdate() {
-    log.debug('componentDidUpdate');
     this.messageInput.focus();
   }
 
@@ -74,7 +42,6 @@ class Messages extends React.Component {
         </div>
 
         <div style={styles.footer}>
-          {/*<input type="text" ref={(input) => this.messageInput = input} />*/}
           <textarea ref={(input) => this.messageInput = input}
                     rows="3"
                     style={styles.textInput}
@@ -86,10 +53,19 @@ class Messages extends React.Component {
                         return false;
                       }
                     }}
+                    onChange={(e) => this.setState({ inputText: e.target.value, preventScroll: true })}
+                    value={this.state.inputText}
           >
           </textarea>
-          <button onClick={this._postMessage} className="fa fa-send fa-2x"
-                  style={styles.sendButton} />
+          <button onClick={this._clearInput}
+                  className="fa fa-remove"
+                  style={{ ...styles.sendButton, visibility: this.state.inputText ? 'visible' : 'hidden'}}
+          />
+          <button onClick={this._postMessage}
+                  className="fa fa-send"
+                  style={styles.sendButton}
+                  disabled={!this.state.inputText || !this.state.inputText.trim().length}
+          />
         </div>
 
       </div>
@@ -100,8 +76,7 @@ class Messages extends React.Component {
     const messageId = message.id;
 
     if (this.state.currentMessage && this.state.currentMessage.id === messageId) {
-      this.setState({ currentMessage: null });
-      this.messageInput.value = '';
+      this.setState({ currentMessage: null, inputText: '' });
     }
 
     log.debug('_deleteMessage', messageId);
@@ -111,42 +86,46 @@ class Messages extends React.Component {
   };
 
   _createMessage = () => {
-    log.debug('_createMessage:', this.messageInput.value);
+    log.debug('_createMessage:', this.state.inputText);
     this.setState({ preventScroll: false });
     this.props.relay.commitUpdate(
       new CreateMessageMutation({
         viewer: this.props.viewer,
-        messageContent: this.messageInput.value
+        messageContent: this.state.inputText
       })
     );
   };
 
   _startEditingMessage = (message) => {
     log.debug('_startEditingMessage:', message);
-    this.setState({ currentMessage: message, preventScroll: true });
-    this.messageInput.value = message.content;
+    this.setState({ currentMessage: message, preventScroll: true, inputText: message.content });
   };
 
   _updateMessage = () => {
-    log.debug('_updateMessage:', this.messageInput.value);
+    log.debug('_updateMessage:', this.state.inputText);
     this.props.relay.commitUpdate(
       new UpdateMessageMutation({
         message: this.state.currentMessage,
-        messageContent: this.messageInput.value
+        messageContent: this.state.inputText
       })
     );
-    this.setState({ currentMessage: null, preventScroll: true });
-    this.messageInput.value = '';
+    this.setState({ currentMessage: null, preventScroll: true, inputText: '' });
   };
 
   _postMessage = () => {
     log.debug('_postMessage:');
+
     if (this.state.currentMessage) {
       this._updateMessage();
     } else {
       this._createMessage();
     }
-    this.messageInput.value = '';
+    this.setState({ inputText: '' });
+  };
+
+  _clearInput = () => {
+    log.debug('_clearInput');
+    this.setState({ currentMessage: null, inputText: '' });
   };
 
   _loadMore = () => {
@@ -185,3 +164,36 @@ export default Relay.createContainer(Messages, {
     `,
   },
 });
+
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  header: {},
+  content: {
+    overflowX: 'auto',
+    flex: 'auto',
+  },
+  footer: {
+    padding: 10,
+    display: 'flex',
+    backgroundColor: 'white',
+    flexShrink: 0,
+  },
+  textInput: {
+    flexGrow: 1,
+    borderWidth: 0,
+    fontSize: 18,
+    marginRight: 10,
+  },
+  sendButton: {
+    border: 0,
+    background: 'none',
+    paddingRight: 10,
+    fontSize: 22,
+    opacity: 0.75,
+  }
+};
