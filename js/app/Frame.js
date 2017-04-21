@@ -12,10 +12,10 @@ class Frame extends React.Component {
       <div style={{height: '100%'}}>
         <div style={styles.header}>
           <div style={{ flex: 'auto', fontSize: 26}}>
-            {this.props.viewer.name} • {this.props.viewer.messages.count}
+            {this.props.viewer.name} · {this.props.viewer.messages.count}
           </div>
 
-          <Link to="/messages"><button style={styles.button} className="fa fa-envelope"/></Link>
+          <Link to="/messages"><button style={{ ...styles.button, fontSize: 18 }} className="fa fa-envelope"/></Link>
 
           <Link to="/profile"><button style={styles.button} className="fa fa-user"/></Link>
         </div>

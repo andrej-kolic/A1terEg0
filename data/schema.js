@@ -167,7 +167,10 @@ const updateViewerMutation = mutationWithClientMutationId({
   inputFields: {
     name: {
       type: new GraphQLNonNull(GraphQLString)
-    }
+    },
+    avatar: {
+      type: GraphQLString
+    },
   },
   outputFields: {
     viewer: {

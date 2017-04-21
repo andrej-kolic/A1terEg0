@@ -68,6 +68,7 @@ const styles = {
     width: 44,
     height: 44,
     marginRight: 10,
+    borderRadius: 22,
   },
   messageContainer: {
     flex: 'auto',

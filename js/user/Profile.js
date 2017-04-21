@@ -11,17 +11,16 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: '',
-      userAvatar: '',
+      userName: this.props.viewer.name,
+      userAvatar: this.props.viewer.avatar,
     }
   }
 
   render() {
-    log.debug(this.props.viewer);
     return (
       <div style={ styles.container }>
         <img src={this.props.viewer.avatar} style={styles.avatar} />
-        <h1>{this.props.viewer.name}</h1>
+        <h1>&nbsp;{this.props.viewer.name}&nbsp;</h1>
 
         <div style={{ marginTop: 50 }} />
           <input
@@ -38,7 +37,13 @@ class Profile extends React.Component {
             onChange={(e) => this.setState({ userAvatar: e.target.value })}
             style={styles.inputField}
           />
-          <button onClick={this._updateUser} style={styles.updateButton}>Update</button>
+          <button
+            onClick={this._updateUser}
+            style={styles.updateButton}
+            disabled={!this.state.userName || !this.state.userAvatar}
+          >
+            Update
+          </button>
       </div>
     );
   }
@@ -46,7 +51,11 @@ class Profile extends React.Component {
   _updateUser = () => {
     log.debug('updateViewer:', this.state);
     this.props.relay.commitUpdate(
-      new UpdateUserMutation({ viewer: this.props.viewer, userName: this.state.userName })
+      new UpdateUserMutation({
+        viewer: this.props.viewer,
+        userName: this.state.userName,
+        userAvatar: this.state.userAvatar,
+      })
     );
     this.setState({ userName: '', avatar: '' });
   }
@@ -54,7 +63,6 @@ class Profile extends React.Component {
 
 
 export default Relay.createContainer(Profile, {
-  initialVariables: { count: 10 },
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
@@ -80,7 +88,7 @@ const styles = {
   avatar: {
     width: 160,
     height: 160,
-    border: '4px solid white',
+    // border: '3px solid white',
     borderRadius: 80,
   },
   inputField: {

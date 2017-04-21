@@ -15,14 +15,15 @@ export default class UpdateUserMutation extends Relay.Mutation {
 
   getVariables() {
     log.debug(this.props);
-    return {name: this.props.userName};
+    return {name: this.props.userName, avatar: this.props.userAvatar};
   }
 
   getFatQuery() {
     return Relay.QL`
       fragment on UpdateViewerPayload {
         viewer {
-          name
+          name,
+          avatar
         }
       }
     `;
