@@ -29,14 +29,14 @@ export default class MessageList extends React.Component {
   render() {
     return (
       <div style={styles.messageList}>
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', paddingTop: 50 }}>
           <button
             disabled={!this.props.viewer.messages.pageInfo.hasPreviousPage}
             onClick={ this.props.onLoadMore }
             style={{
               ...styles.loadMoreButton,
-              visibility: this.props.viewer.messages.pageInfo.hasPreviousPage
-                ? 'visible' : 'hidden'
+              display: this.props.viewer.messages.pageInfo.hasPreviousPage
+                ? 'inline-block' : 'none'
             }}
           >
             ^ Older ^
@@ -81,7 +81,7 @@ const styles = {
     backgroundColor: '#ccc',
     color: '#666',
     fontSize: 14,
-    marginTop: 80,
+    marginTop: 20,
   }
 };
 

@@ -18,5 +18,8 @@ body {
 
 textarea:focus, button:focus {
     outline: none;
+}
+
+textarea {
     font-family: Roboto, sans-serif;
 }
