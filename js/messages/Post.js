@@ -21,7 +21,7 @@ export default class Post extends React.Component {
         </button>
 
         <button
-          onClick={() => this.props.onDelete(this.props.message.id)}
+          onClick={() => this.props.onDelete(this.props.message)}
           className="fa fa-times fa-2x"
           style={styles.messageButton}
         >

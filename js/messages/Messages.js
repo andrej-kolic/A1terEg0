@@ -88,14 +88,22 @@ class Messages extends React.Component {
                     }}
           >
           </textarea>
-          <button onClick={this._postMessage} className="fa fa-send fa-2x" style={styles.sendButton} />
+          <button onClick={this._postMessage} className="fa fa-send fa-2x"
+                  style={styles.sendButton} />
         </div>
 
       </div>
     );
   }
 
-  _deleteMessage = (messageId) => {
+  _deleteMessage = (message) => {
+    const messageId = message.id;
+
+    if (this.state.currentMessage && this.state.currentMessage.id === messageId) {
+      this.setState({ currentMessage: null });
+      this.messageInput.value = '';
+    }
+
     log.debug('_deleteMessage', messageId);
     this.props.relay.commitUpdate(
       new RemoveMessageMutation({ viewer: this.props.viewer, messageId })
