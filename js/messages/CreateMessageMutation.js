@@ -23,6 +23,7 @@ export default class CreateMessageMutation extends Relay.Mutation {
       fragment on CreateMessagePayload {
         viewer {
           messages(last: 1) {
+            count
             edges {
               node {
                 content,
