@@ -195,7 +195,7 @@ const styles = {
   textInput: {
     flexGrow: 1,
     borderWidth: 0,
-    fontSize: 18,
+    fontSize: 16,
     marginRight: 10,
   },
   sendButton: {
