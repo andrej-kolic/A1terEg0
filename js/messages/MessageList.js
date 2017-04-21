@@ -7,14 +7,6 @@ import Post from './Post';
 const log = createLogger('components.Messages');
 
 
-const styles = {
-  messageList: {
-    padding: 10,
-    overflowY: 'auto',
-  },
-};
-
-
 export default class MessageList extends React.Component {
 
   posts = [];
@@ -38,11 +30,13 @@ export default class MessageList extends React.Component {
   render() {
     return (
       <div style={styles.messageList}>
-        <div>
+        <div style={{ textAlign: 'center' }}>
           <button
             disabled={!this.props.viewer.messages.pageInfo.hasPreviousPage}
-            onClick={ this.props.onLoadMore }>
-            more...
+            onClick={ this.props.onLoadMore }
+            style={styles.loadMoreButton}
+          >
+            ^ Older ^
           </button>
         </div>
         {this.props.viewer.messages.edges.map((edge, index) =>
@@ -68,5 +62,24 @@ export default class MessageList extends React.Component {
       node.scrollIntoView();
     }
   };
-
 }
+
+
+const styles = {
+  messageList: {
+    padding: 10,
+    overflowY: 'auto',
+  },
+  loadMoreButton: {
+    height: 40,
+    padding: '0 20px',
+    borderRadius: 20,
+    border: 0,
+    backgroundColor: '#ccc',
+    color: '#666',
+    fontSize: 14,
+    marginTop: 50,
+  }
+};
+
+
