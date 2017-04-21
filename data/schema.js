@@ -111,6 +111,10 @@ const messageType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'Content of message',
     },
+    createdAt: {
+      type: GraphQLInt,
+      description: 'Creation timestamp',
+    },
   }),
   interfaces: [nodeInterface],
 });

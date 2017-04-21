@@ -7,25 +7,30 @@ export default class Post extends React.Component {
   render() {
     const highlightStyle = this.props.highlight ? styles.highlight : {};
     return (
-      <div style={styles.container}>
-        <img src={this.props.viewer.avatar} style={styles.avatar} />
-        <div style={styles.messageContainer}>
-          <span style={{ ...styles.message, ...highlightStyle }}>{this.props.message.content}</span>
+      <div>
+        <div style={styles.container}>
+          <img src={this.props.viewer.avatar} style={styles.avatar} />
+          <div style={styles.messageContainer}>
+            <span
+              style={{ ...styles.message, ...highlightStyle }}>{this.props.message.content}</span>
+          </div>
+
+          <button
+            onClick={() => this.props.onStartEditing(this.props.message)}
+            className="fa fa-pencil"
+            style={{ ...styles.messageButton, ...styles.messageButtonEdit }}
+          >
+          </button>
+
+          <button
+            onClick={() => this.props.onDelete(this.props.message)}
+            className="fa fa-times fa-2x"
+            style={styles.messageButton}
+          >
+          </button>
         </div>
 
-        <button
-          onClick={() => this.props.onStartEditing(this.props.message)}
-          className="fa fa-pencil"
-          style={{ ...styles.messageButton, ...styles.messageButtonEdit }}
-        >
-        </button>
-
-        <button
-          onClick={() => this.props.onDelete(this.props.message)}
-          className="fa fa-times fa-2x"
-          style={styles.messageButton}
-        >
-        </button>
+        <div>{this.props.message.createdAt}</div>
       </div>
     );
   }
@@ -71,6 +76,5 @@ const styles = {
     height: 26,
     borderRadius: 13,
   },
-  messageButtonEdit: {
-  }
+  messageButtonEdit: {}
 };

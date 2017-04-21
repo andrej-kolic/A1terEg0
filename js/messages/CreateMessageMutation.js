@@ -25,7 +25,8 @@ export default class CreateMessageMutation extends Relay.Mutation {
           messages(last: 1) {
             edges {
               node {
-                content
+                content,
+                createdAt
               }
             }
           }

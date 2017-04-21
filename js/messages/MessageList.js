@@ -19,6 +19,13 @@ export default class MessageList extends React.Component {
 
   posts = [];
 
+  // constructor(props){
+  //   super(props);
+  //   this.state = {
+  //     shouldScroll: !this.props.preventScroll
+  //   }
+  // }
+
   componentDidMount() {
     this._scrollToLast();
   }
@@ -53,10 +60,10 @@ export default class MessageList extends React.Component {
   }
 
   _scrollToLast = () => {
-    if (! this.post || this.props.loadMore) return;
+    if (!this.posts || this.props.preventScroll) return;
     // const len = this.posts.length - 1;
     const node = ReactDOM.findDOMNode(this.posts);
-    log.debug('_scrollToLast', this.props.loadMore, node, this.posts);
+    log.debug('_scrollToLast', this.props.preventScroll, node, this.posts);
     if (node) {
       node.scrollIntoView();
     }

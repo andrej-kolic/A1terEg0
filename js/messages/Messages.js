@@ -22,11 +22,11 @@ const styles = {
     overflowX: 'auto',
     flex: 'auto',
   },
-
   footer: {
     padding: 10,
     display: 'flex',
     backgroundColor: 'white',
+    flexShrink: 0,
   },
   textInput: {
     flexGrow: 1,
@@ -48,7 +48,7 @@ class Messages extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { currentMessage: null, loadMore: false }
+    this.state = { currentMessage: null, preventScroll: false }
   }
 
   componentDidMount() {
@@ -68,7 +68,7 @@ class Messages extends React.Component {
                        onStartEditing={this._startEditingMessage}
                        onDelete={this._deleteMessage}
                        onLoadMore={this._loadMore}
-                       loadMore={this.state.loadMore}
+                       preventScroll={this.state.preventScroll}
                        currentMessage={this.state.currentMessage}
           />
         </div>
@@ -112,7 +112,7 @@ class Messages extends React.Component {
 
   _createMessage = () => {
     log.debug('_createMessage:', this.messageInput.value);
-    this.setState({ loadMore: false });
+    this.setState({ preventScroll: false });
     this.props.relay.commitUpdate(
       new CreateMessageMutation({
         viewer: this.props.viewer,
@@ -123,7 +123,7 @@ class Messages extends React.Component {
 
   _startEditingMessage = (message) => {
     log.debug('_startEditingMessage:', message);
-    this.setState({ currentMessage: message });
+    this.setState({ currentMessage: message, preventScroll: true });
     this.messageInput.value = message.content;
   };
 
@@ -135,7 +135,7 @@ class Messages extends React.Component {
         messageContent: this.messageInput.value
       })
     );
-    this.setState({ currentMessage: null });
+    this.setState({ currentMessage: null, preventScroll: true });
     this.messageInput.value = '';
   };
 
@@ -150,7 +150,7 @@ class Messages extends React.Component {
   };
 
   _loadMore = () => {
-    this.setState({ loadMore: true });
+    this.setState({ preventScroll: true });
     log.debug('_loadMore', this.props.viewer);
     if (!this.props.viewer.messages.pageInfo.hasPreviousPage) return;
     this.props.relay.setVariables({
@@ -177,6 +177,7 @@ export default Relay.createContainer(Messages, {
               ${UpdateMessageMutation.getFragment('message')},
               id,
               content,
+              createdAt
             },
           },
         },

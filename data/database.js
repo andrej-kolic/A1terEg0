@@ -15,9 +15,14 @@ const log = createLogger('server.schema');
 class Entity {
   static idCounter = 1;
   constructor(payload){
-    Object.assign(this, payload, { id: `id-${this.constructor.idCounter}` });
-    log.debug('^^^', this);
+    Object.assign(
+      this,
+      { createdAt: Date.now() / 1000 },
+      payload,
+      { id: `id-${this.constructor.idCounter}` },
+    );
     this.constructor.idCounter += 1;
+    log.debug('entity created:', this);
   }
 }
 
@@ -32,7 +37,7 @@ const viewer = new UserEntity({
   avatar: 'https://opensource.ncsa.illinois.edu/jira/secure/useravatar?size=small&avatarId=12848'
 });
 
-const messages = Array(5).fill(1).map((_, i) => (
+const messages = Array(100).fill(1).map((_, i) => (
   new MessageEntity({ id: `${i}`, content: `msg${i}` })
 ));
 messages.push(new MessageEntity({
