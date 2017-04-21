@@ -5,6 +5,7 @@ import CreateMessageMutation from './CreateMessageMutation';
 import UpdateMessageMutation from './UpdateMessageMutation';
 import RemoveMessageMutation from './RemoveMessageMutation';
 import MessageList from './MessageList';
+import TextareaAutosize from 'react-autosize-textarea'
 
 
 const log = createLogger('components.Messages');
@@ -42,8 +43,8 @@ class Messages extends React.Component {
         </div>
 
         <div style={styles.footer}>
-          <textarea ref={(input) => this.messageInput = input}
-                    rows="3"
+          <TextareaAutosize innerRef={(input) => this.messageInput = input}
+                    maxRows={5}
                     style={styles.textInput}
                     placeholder="Send a message"
                     onKeyDown={(e) => {
@@ -56,7 +57,7 @@ class Messages extends React.Component {
                     onChange={(e) => this.setState({ inputText: e.target.value, preventScroll: true })}
                     value={this.state.inputText}
           >
-          </textarea>
+          </TextareaAutosize>
           <button onClick={this._clearInput}
                   className="fa fa-remove"
                   style={{ ...styles.sendButton, visibility: this.state.inputText ? 'visible' : 'hidden'}}
