@@ -9,7 +9,7 @@ const log = createLogger('app.Frame');
 class Frame extends React.Component {
   render() {
     return (
-      <div style={{height: '100%'}}>
+      <div style={styles.container}>
         <div style={styles.header}>
           <div style={{ flex: 'auto', fontSize: 26}}>
             {this.props.viewer.name} · {this.props.viewer.messages.count}
@@ -42,6 +42,9 @@ export default Relay.createContainer(Frame, {
 
 
 const styles = {
+  container: {
+    height: '100%',
+  },
   header: {
     backgroundColor: '#4285f4',
     // opacity: 0.95,

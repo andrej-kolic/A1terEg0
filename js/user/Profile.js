@@ -20,7 +20,7 @@ class Profile extends React.Component {
     return (
       <div style={ styles.container }>
         <img src={this.props.viewer.avatar} style={styles.avatar} />
-        <h1>&nbsp;{this.props.viewer.name}&nbsp;</h1>
+        <h1 style={{color: 'white'}}>&nbsp;{this.props.viewer.name}&nbsp;</h1>
 
         <div style={{ marginTop: 50 }} />
           <input

@@ -171,6 +171,9 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
+    maxWidth: 500,
+    margin: 'auto',
+    backgroundColor: '#DDD',
   },
   header: {},
   content: {

@@ -77,7 +77,7 @@ const styles = {
     backgroundColor: '#ccc',
     color: '#666',
     fontSize: 14,
-    marginTop: 50,
+    marginTop: 80,
   }
 };
 
