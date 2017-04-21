@@ -28,11 +28,12 @@ export default class Post extends React.Component {
 
   render() {
     const highlightStyle = this.props.highlight ? styles.highlight : {};
+    const highlightArrowStyle = this.props.highlight ? styles.highlightArrow : {};
     return (
       <div>
         <div style={styles.container}>
           <img src={this.props.viewer.avatar} style={styles.avatar} />
-          <div style={styles.arrow} />
+          <div style={{ ...styles.arrow, ...highlightArrowStyle }} />
           <div style={styles.messageContainer}>
             <span
               style={{ ...styles.message, ...highlightStyle }}>{this.props.message.content}</span>
@@ -98,6 +99,9 @@ const styles = {
   },
   highlight: {
     backgroundColor: '#ffff91',
+  },
+  highlightArrow: {
+    borderRightColor: '#ffff91',
   },
   messageButton: {
     border: 0,
