@@ -10,6 +10,7 @@ class Profile extends React.Component {
 
   constructor(props) {
     super(props);
+    log.debug('constructor');
     this.state = {
       userName: this.props.viewer.name,
       userAvatar: this.props.viewer.avatar,
@@ -39,7 +40,10 @@ class Profile extends React.Component {
           />
           <button
             onClick={this._updateUser}
-            style={styles.updateButton}
+            style={{
+              ...styles.updateButton,
+              ...(this._updateDisabled() ? styles.updateButtonDisabled : null)
+            }}
             disabled={!this.state.userName || !this.state.userAvatar}
           >
             Update
@@ -47,6 +51,8 @@ class Profile extends React.Component {
       </div>
     );
   }
+
+  _updateDisabled = () => !this.state.userName || !this.state.userAvatar;
 
   _updateUser = () => {
     log.debug('updateViewer:', this.state);
@@ -105,8 +111,13 @@ const styles = {
     height: 40,
     borderRadius: 20,
     padding: '0 40px',
-    backgroundColor: '#BBB',
+    backgroundColor: '#4285f4',
     cursor: 'pointer',
     marginTop: 20,
+    color: 'white',
+  },
+  updateButtonDisabled: {
+    backgroundColor: '#BBB',
+    color: '#555',
   }
 };

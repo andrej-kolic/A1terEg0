@@ -32,3 +32,9 @@ npm start
 ## License
 
 Relay Starter Kit is [BSD licensed](./LICENSE). We also provide an additional [patent grant](./PATENTS).
+
+
+## Improvements
+- validation
+- conversations / multiple users
+- authentication
