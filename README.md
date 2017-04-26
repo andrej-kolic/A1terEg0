@@ -42,3 +42,4 @@ Relay Starter Kit is [BSD licensed](./LICENSE). We also provide an additional [p
 - validation
 - conversations / multiple users
 - authentication
+- default avatar
