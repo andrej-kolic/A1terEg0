@@ -7,6 +7,7 @@ import {
   getMessage,
 } from '../database';
 
+//import { userType } from '../user/types'
 
 /**
  * We get the node interface and field from the Relay library.
