@@ -1,8 +1,4 @@
-import {
-  GraphQLObjectType,
-  GraphQLString,
-} from 'graphql';
-
+import { GraphQLObjectType, GraphQLString } from 'graphql';
 import {
   connectionArgs,
   connectionFromArray,
@@ -33,7 +29,7 @@ export const userType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: (_, args) => {
         const messages = getMessages();   // TODO: for logged user only
-        return { ...connectionFromArray(getMessages(), args), count: getMessages().length };
+        return { ...connectionFromArray(messages, args), count: messages.length };
       },
     },
   }),

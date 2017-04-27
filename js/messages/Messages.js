@@ -14,8 +14,6 @@ const MESSAGES_PAGE_SIZE = 40;
 
 class Messages extends React.Component {
 
-  posts = [];
-
   constructor(props) {
     super(props);
     this.state = { currentMessage: null, preventScroll: false, inputText: '' }
@@ -79,11 +77,9 @@ class Messages extends React.Component {
 
   _deleteMessage = (message) => {
     const messageId = message.id;
-
     if (this.state.currentMessage && this.state.currentMessage.id === messageId) {
       this.setState({ currentMessage: null, inputText: '' });
     }
-
     log.debug('_deleteMessage', messageId);
     this.props.relay.commitUpdate(
       new RemoveMessageMutation({ viewer: this.props.viewer, messageId })

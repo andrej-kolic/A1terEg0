@@ -9,7 +9,7 @@ const log = createLogger('components.Messages');
 
 export default class MessageList extends React.Component {
 
-  posts = [];
+  posts = []; // reference to last created Post element
 
   componentDidMount() {
     this._scrollToLast();

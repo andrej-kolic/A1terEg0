@@ -21,7 +21,7 @@ export const updateViewerMutation = mutationWithClientMutationId({
   outputFields: {
     viewer: {
       type: userType,
-      resolve: payload => getViewer()
+      resolve: payload => getViewer() // or return payload
     }
   },
   mutateAndGetPayload: (input) => {

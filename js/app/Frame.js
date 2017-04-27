@@ -6,6 +6,7 @@ import createLogger from '../logger';
 const log = createLogger('app.Frame');
 
 
+// TODO: implement as functional component
 class Frame extends React.Component {
   render() {
     return (

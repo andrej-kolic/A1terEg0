@@ -14,6 +14,7 @@ import createHashHistory from 'history/lib/createHashHistory'
 import useRouterHistory from 'react-router/lib/useRouterHistory';
 
 
+// root query, can also extend Relay.Route
 const ViewerQueries = {
   viewer: () => Relay.QL`query { viewer }`
 };

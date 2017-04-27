@@ -38,7 +38,7 @@ export default class RemoveMessageMutation extends Relay.Mutation {
 
   getConfigs() {
     return [{
-      type: 'RANGE_DELETE',
+      type: 'RANGE_DELETE',   // NODE_DELETE ?
       parentName: 'viewer',
       parentID: this.props.viewer.id,
       connectionName: 'messages',

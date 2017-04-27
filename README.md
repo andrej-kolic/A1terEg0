@@ -39,7 +39,13 @@ Relay Starter Kit is [BSD licensed](./LICENSE). We also provide an additional [p
 
 
 ## Improvements
+- error handling
 - validation
+- loading state
 - conversations / multiple users
 - authentication
 - default avatar
+- content aware message box
+- localizations
+- PropTypes validation for react components
+- further decoupling
