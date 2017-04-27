@@ -78,7 +78,9 @@ class Messages extends React.Component {
   _deleteMessage = (message) => {
     const messageId = message.id;
     if (this.state.currentMessage && this.state.currentMessage.id === messageId) {
-      this.setState({ currentMessage: null, inputText: '' });
+      this.setState({ currentMessage: null, inputText: '', preventScroll: true });
+    } else {
+      this.setState({ preventScroll: true });
     }
     log.debug('_deleteMessage', messageId);
     this.props.relay.commitUpdate(

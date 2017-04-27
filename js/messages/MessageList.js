@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import createLogger from '../logger';
 import Post from './Post';
 
@@ -35,16 +36,23 @@ export default class MessageList extends React.Component {
             ^ Older ^
           </button>
         </div>
-        {this.props.viewer.messages.edges.map((edge, index) =>
-          <Post key={edge.node.id}
-                viewer={this.props.viewer}
-                message={edge.node}
-                onStartEditing={this.props.onStartEditing}
-                onDelete={this.props.onDelete}
-                ref={(ref) => this.posts = ref}
-                highlight={!!(this.props.currentMessage && this.props.currentMessage.id === edge.node.id)}
-          />
-        )}
+
+        <CSSTransitionGroup
+          transitionName="animated-item"
+          transitionEnterTimeout={300}
+          transitionLeaveTimeout={300}>
+
+          {this.props.viewer.messages.edges.map((edge, index) =>
+            <Post key={edge.node.id}
+                  viewer={this.props.viewer}
+                  message={edge.node}
+                  onStartEditing={this.props.onStartEditing}
+                  onDelete={this.props.onDelete}
+                  ref={(ref) => this.posts = ref}
+                  highlight={!!(this.props.currentMessage && this.props.currentMessage.id === edge.node.id)}
+            />
+          )}
+        </CSSTransitionGroup>
       </div>
     );
   }
